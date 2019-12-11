@@ -25,7 +25,7 @@ Spotify200 is a data package centered on songs which reached Spotify's Top 200 M
 You can install the released version of Spotify200 with:
 
 ``` r 
-devtools::install_github("IAjimi/Spotify200")
+devtools::install_github("IAjimi/Spotify200", build_vignettes = TRUE)
 ```
 
 ## Datasets
@@ -39,6 +39,8 @@ head(track_information)
 head(track_position_aggregate)
 head(pitchfork_reviews)
 ```
+
+More information about the datasets can be found in the package's vignettes.
 
 ## Data Collection
 The data collection for this package was done in three steps:
