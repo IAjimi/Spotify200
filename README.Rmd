@@ -1,0 +1,52 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# Spotify200
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+Spotify200 is a data package centered on songs which reached Spotify's Top 200 Most Streamed songs in the U.S. between January 2017 and December 2019.
+
+## Installation
+
+You can install the released version of Spotify200 with:
+
+``` r 
+devtools::install_github("IAjimi/Spotify200")
+```
+
+## Datasets
+
+The following displays the first rows of all datasets included in this package:
+
+```{r example}
+library(Spotify200)
+head(chart_position)
+head(track_information)
+head(track_position_aggregate)
+head(pitchfork_reviews)
+```
+
+## Data Collection
+The data collection for this package was done in three steps:
+
+1. Information was downloaded from the Spotify Charts website about the 200 most streamed songs in the U.S. The information is available as `.csv` files available for download from the site: the download link varies predictably with the date the information was collected on, so all files can easily be retrieved with a for loop. 
+2. The Spotify API was used to retrieve artist and track specific information for all tracks found in 1. There is a Spotify API in R, but it doesn't work properly when user authorization is required. The user authorization flow isn't actually required for this package, but I still used my own API wrapper functions (customized to retrieve the information I was interested in).
+3. Review information for the artists in 1) was web-scraped from Pitchfork.
+
+The code can easily be extended to collect the most recent information from Spotify Charts: since the code for steps 2) and 3) is written to find information relevant to 1), the data collection in those steps automatically extends to collect this new, additional information.
+
+Generally, the code is highly dependent on web-scraping, the Spotify API, and specific URLs, so a change in any of the three would require a corresponding rewrite.
