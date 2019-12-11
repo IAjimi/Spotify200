@@ -1,0 +1,31 @@
+---
+title: "track_information"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{track_information}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(Spotify200)
+library(dplyr)
+library(ggplot2)
+```
+
+## track_information
+
+This dataset, as this track indicates, includes a wealth of track-level information. The inclusion of popularity features (which can be complemented with the chart records included in this package) makes this a good source of information for regressions seeking to explain the popularity of certain songs.
+
+
+```{r}
+summary(track_information)
+```
+

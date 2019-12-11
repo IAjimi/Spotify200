@@ -1,0 +1,33 @@
+---
+title: "track_position_aggregate"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{track_position_aggregate}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library("ggplot2")
+library("dplyr")
+library("Spotify200")
+```
+
+## track_position_aggregate
+
+The `track_position_aggregate` dataset is essentially a ready-made aggregate version of `track-information`, which contains track-level aggregate statistics. 
+
+It can be used to quickly retrieve key metrics for every song listed:
+```{r}
+summary(track_position_aggregate)
+ggplot(track_position_aggregate, aes(Avg_Streams)) + geom_histogram(bins = 50) + labs(y = "Count", x = "Average Streams")
+ggplot(track_position_aggregate, aes(Days_Trending)) + geom_histogram(bins = 50) + labs(y = "Count", x = "Number of Days in the Top 200")
+```
+

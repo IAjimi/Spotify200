@@ -1,0 +1,85 @@
+---
+title: "chart_position"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{chart_position}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library("ggplot2")
+library("dplyr")
+library("Spotify200")
+```
+
+## Chart Position
+
+This Vignette briefly shows some of the information one can derive from the `chart_position` dataset.
+
+First, we can look at streams per artist over time.
+
+```{r}
+# Total Streams per Artist per Day
+time_position <- chart_position %>% 
+  group_by(Artist, Date) %>%
+  summarize(Streams = sum(Streams),
+            per = Streams / sum(.$Streams)) %>%
+  arrange(desc(Date))
+
+# Find Top Artists
+top_artists <- time_position %>% arrange(desc(Streams)) %>% distinct(Artist)
+
+# Graph: Total Streams per Date per Artist
+ggplot(time_position, aes(Date, Streams, group = Artist)) +
+  geom_line(color = "grey") +
+  geom_line(data = filter(time_position, Artist %in% top_artists$Artist[1:5]) , aes(color = Artist)) +
+  labs(title = "Streams Per Artist Over Time")
+```
+
+We can also who were the most streamed artists from 2017 to 2019 and in 2019 alone:
+
+```{r}
+## Most Streamed Artists Overall
+chart_position %>% 
+  group_by(Artist) %>%
+  summarize(Streams = sum(Streams),
+            per = Streams / sum(.$Streams)) %>%
+  arrange(desc(Streams)) %>%
+  head(10)
+
+## Most Streamed Artists in 2019
+chart_position %>% 
+  filter(Date >= "2019-01-01") %>%
+  group_by(Artist) %>%
+  summarize(Streams = sum(Streams),
+            per = Streams / sum(.$Streams)) %>%
+  arrange(desc(Streams)) %>%
+  head(10)
+```
+
+We can look at which songs were the most streamed throughout this time period:
+
+```{r}
+## Most Streamed Songs Overall
+chart_position %>% 
+  group_by(Artist, Track) %>%
+  summarize(Streams = sum(Streams),
+            per = Streams / sum(.$Streams)) %>%
+  arrange(desc(Streams)) %>%
+  head(10)
+```
+
+Finally, we can find the most streamed songs per day, as well as the songs which were in the top position the longest:
+```{r}
+## Most Streamed Songs in A Day
+chart_position %>% arrange(desc(Streams)) %>% select(Track, Artist, Date, Streams) %>% head(10)
+
+## Songs Longest in Number 1 Position
+chart_position %>% filter(Position == 1) %>% group_by(Track, Artist) %>% count() %>% arrange(desc(n)) %>% head(10)
+```
+
