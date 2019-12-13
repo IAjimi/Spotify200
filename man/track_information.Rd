@@ -4,12 +4,16 @@
 \name{track_information}
 \alias{track_information}
 \title{Track Information}
-\format{A data frame with 150 rows and 5 variables:
+\format{A data frame with 5433 rows and 34 variables:
 \describe{
   \item{Track}{track name}
   \item{Artist}{artist's name}
   \item{track_ID}{Spotify Track ID}
   \item{artist_ID}{Spotify Artist ID}
+  \item{album_name}{album title}
+  \item{artist_popularity}{artist popularity, computed by Spotify, ranging from 0 to 100}
+  \item{followers}{the artist's number of Spotify followers}
+  \item{genres}{artist genres}
   \item{album_release_date}{album release date}
   \item{album_type}{album type, e.g., album, single, compilation, etc}
   \item{popularity}{track popularity, computed by Spotify, ranging from 0 to 100}
@@ -45,7 +49,7 @@
 track_information
 }
 \description{
-A dataset of 5387 observations and 27 variables containing information relating to every track having reached Spotify's top 200 tracks (U.S.) between January 1, 2017 and December 4, 2019.
+A dataset containing information relating to every track having reached Spotify's top 200 tracks (U.S.) between January 1, 2017 and December 4, 2019.
 Includes information retrieved from Spotify relating to the song's audio features.
 }
 \keyword{datasets}

@@ -4,7 +4,7 @@
 \name{pitchfork_reviews}
 \alias{pitchfork_reviews}
 \title{Pitchfork Album Reviews}
-\format{A data frame with 150 rows and 5 variables:
+\format{A data frame with 979 rows and 5 variables:
 \describe{
   \item{artist}{artist's name}
   \item{score}{score given by pitchfork, from a scale of 0 to 10}

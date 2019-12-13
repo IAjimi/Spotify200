@@ -4,7 +4,7 @@
 \name{track_position_aggregate}
 \alias{track_position_aggregate}
 \title{Aggregate Track Position}
-\format{A data frame with 4,503 rows and 6 variables:
+\format{A data frame with 4,538 rows and 6 variables:
 \describe{
   \item{Track}{track name}
   \item{Artist}{artist name}

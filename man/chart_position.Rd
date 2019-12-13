@@ -4,7 +4,7 @@
 \name{chart_position}
 \alias{chart_position}
 \title{Spotify Charts Position}
-\format{A data frame with 212,600 rows and 7 variables:
+\format{A data frame with 214,400 rows and 7 variables:
 \describe{
   \item{Position}{track position in the top 200}
   \item{Track}{track name}
