@@ -7,9 +7,11 @@
 
 <!-- badges: end -->
 
-Spotify200 is a data package centered on songs which reached Spotify’s
-Top 200 Most Streamed songs in the U.S. between January 2017 and
-December 2019.
+Spotify200 is a data package centered on Spotify’s Top 200 Most Streamed
+songs in the U.S. It includes a wealth of information about every song
+which reached the top 200 between January 1, 2017 and December 2019,
+including audio-features, artist-specific information, and its ranking
+over time.
 
 ## Installation
 
@@ -144,31 +146,36 @@ head(pitchfork_reviews)
 #> 6 2017-01-31
 ```
 
-More information about the datasets can be found in the package’s
-vignettes.
+More information about the datasets can be found in the vignettes.
 
 ## Data Collection
 
 The data collection for this package was done in three steps:
 
-1.  Information was downloaded from the Spotify Charts website about the
-    200 most streamed songs in the U.S. The information is available as
-    `.csv` files available for download from the site: the download link
-    varies predictably with the date the information was collected on,
-    so all files can easily be retrieved with a for loop.
-2.  The Spotify API was used to retrieve artist and track specific
-    information for all tracks found in 1. There is a Spotify API in R,
-    but it doesn’t work properly when user authorization is required.
-    The user authorization flow isn’t actually required for this
-    package, but I still used my own API wrapper functions (customized
-    to retrieve the information I was interested in).
+1.  Information about the 200 most streamed songs per day in the U.S.
+    was downloaded from the [Spotify Charts
+    website](https://spotifycharts.com/). The information is available
+    as `.csv` files available for download from the site: the download
+    link varies predictably with the date the information was collected
+    on, so all files can easily be retrieved with a for loop.
+2.  The [Spotify
+    API](https://developer.spotify.com/documentation/web-api/) was used
+    to retrieve artist and track specific information for all tracks
+    found in 1. There is a Spotify API in R, but it doesn’t work
+    properly when user authorization is required. The user authorization
+    flow isn’t actually required for this package but I still used my
+    own API wrapper functions (customized to retrieve the information I
+    was interested in).
 3.  Review information for the artists in 1) was web-scraped from
-    Pitchfork.
+    [Pitchfork](https://pitchfork.com/), a well-known ‘indie’ music
+    review publication.
 
 The code can easily be extended to collect the most recent information
 from Spotify Charts: since the code for steps 2) and 3) is written to
 find information relevant to 1), the data collection in those steps
 automatically extends to collect this new, additional information.
+Similarly, the url used in 1) can easily be amended to retrieve the same
+information for any other country.
 
 Generally, the code is highly dependent on web-scraping, the Spotify
 API, and specific URLs, so a change in any of the three would require a
