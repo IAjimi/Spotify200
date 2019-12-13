@@ -19,9 +19,9 @@ library("Spotify200")
 
 ## Chart Position
 
-This Vignette briefly shows some of the information one can derive from the `chart_position` dataset.
+This vignette briefly shows some of the information one can derive from the `chart_position` dataset.
 
-First, we can look at streams per artist over time.
+First, we can look at total daily streams streams per artist over time.
 
 ```{r}
 # Total Streams per Artist per Day
@@ -38,10 +38,10 @@ top_artists <- time_position %>% arrange(desc(Streams)) %>% distinct(Artist)
 ggplot(time_position, aes(Date, Streams, group = Artist)) +
   geom_line(color = "grey") +
   geom_line(data = filter(time_position, Artist %in% top_artists$Artist[1:5]) , aes(color = Artist)) +
-  labs(title = "Streams Per Artist Over Time")
+  labs(title = "Streams Per Artist Over Time", y = "Total Daily Streams")
 ```
 
-We can also who were the most streamed artists from 2017 to 2019 and in 2019 alone:
+We can also see who were the most streamed artists from 2017 to 2019 as well as in 2019 alone:
 
 ```{r}
 ## Most Streamed Artists Overall
@@ -61,6 +61,8 @@ chart_position %>%
   arrange(desc(Streams)) %>%
   head(10)
 ```
+
+We can note, in passing, that most artists are either pop or hip-hop artists (sometimes both). Moreover, the 2019 scene seems to have been dominated by new artists, such as Billie Eilish, Juice WRLD, Lil Nas X and DaBaby.
 
 We can look at which songs were the most streamed throughout this time period:
 
@@ -83,3 +85,4 @@ chart_position %>% arrange(desc(Streams)) %>% select(Track, Artist, Date, Stream
 chart_position %>% filter(Position == 1) %>% group_by(Track, Artist) %>% count() %>% arrange(desc(n)) %>% head(10)
 ```
 
+Drake had the most streams per day after the release of *Scorpion*, his fifth studio album, on June 29, 2018. This success was long-lived, as Drake also had 3 of the songs which stayed in the top position for the longest.

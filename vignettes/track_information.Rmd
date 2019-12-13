@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 library(Spotify200)
 library(dplyr)
 library(ggplot2)
+library(stringr)
 ```
 
 ## track_information
@@ -28,4 +29,59 @@ This dataset, as this track indicates, includes a wealth of track-level informat
 ```{r}
 summary(track_information)
 ```
+
+We can look at the correlation between track popularity and other key variables:
+```{r}
+track_information %>% 
+  select_if(is.numeric) %>% 
+  select(- score, - bnm, - n_albums_review) %>%
+  filter(!is.na(artist_popularity) & !is.na(followers)) %>% 
+  cor() %>% 
+  round(2)
+```
+
+We can also look at the most popular genres:
+```{r}
+track_information %>% mutate(
+  genres = as.character(genres), #cleaning up genres
+  simple_genre = 
+  case_when(
+    str_detect(genres, "(hip hop|rap|grime)") == TRUE ~ "hip hop",
+    str_detect(genres, "soul") == TRUE ~ "soul",
+    str_detect(genres, "pop") == TRUE ~ "pop",
+    str_detect(genres, "r&b") == TRUE ~ "r&b",
+    str_detect(genres, "latin") == TRUE ~ "latin",
+    str_detect(genres, "hollywood") == TRUE ~ "hollywood",
+    str_detect(genres, "country") == TRUE ~ "country",
+    str_detect(genres, "adult standards") == TRUE ~ "adult standards",
+    str_detect(genres, "(dance)|(house)|(techno)") == TRUE ~ "dance",
+    str_detect(genres, "rock") == TRUE ~ "rock",
+    T ~ genres #else leave intact
+  )
+) %>%
+  group_by(simple_genre) %>%
+  summarise(n = n(),
+            popularity = median(popularity, na.rm = TRUE)) %>%
+  arrange(desc(popularity)) %>%
+  filter(n > 1) #remove outlier genres
+```
+
+This isn't very accurate, as more popular genres have more songs in the top 200 and therefore have a lower average / median popularity.
+
+We can also use this data to look at the median track features of popular artists:
+
+```{r}
+# Most Popular Artists
+top_10_artists <- track_information %>% arrange(desc(artist_popularity)) %>% distinct(Artist, artist_popularity) %>% top_n(50, artist_popularity)
+
+# Mean Values For All Top 50 Artists
+track_information %>% 
+  filter(Artist %in% top_10_artists$Artist) %>% 
+  group_by(Artist) %>%
+  select_if(is.numeric) %>%
+  mutate_all(mean) %>%
+  head()
+``` 
+
+A more fine-tuned analysis could look at how those metrics change over time.
 

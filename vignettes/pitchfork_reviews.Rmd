@@ -21,7 +21,7 @@ library("Spotify200")
 
 This Vignette briefly shows some of the information one can derive from the `pitchfork_reviews` dataset. It is important to remember that this dataset does not include data for all Pitchfork reviews, but only the subsegment relating to artists which were listed in `chart_positions`. These reviews are all of *albums*, so the number of observations in this dataset is necessarily smaller than that of `track_list`.
 
-First, we can look at the highest rated albums.
+For instance, we can use this dataset to find the highest rated albums and albums.
 
 ```{r}
 # More Appropriate Variable Types
@@ -41,3 +41,21 @@ pitchfork_reviews %>%
 
 ```
 
+This analysis can easily be extended to 2019:
+
+```{r}
+## Highest Rated Albums -- 2019
+pitchfork_reviews %>% filter(pub_date >= "2019-01-01") %>% arrange(desc(score)) %>% head(10) #highest scoring albums
+
+## Highest Rated Artists
+pitchfork_reviews %>% 
+  filter(pub_date >= "2019-01-01") %>%
+  group_by(artist) %>%
+  summarize(score = mean(as.numeric(score), na.rm = TRUE),
+            n = n()) %>%
+  filter(!is.na(score)) %>%
+  arrange(desc(score))
+
+```
+
+This dataset could also be combined at an album-level with `track_information` to add a measurement of (subjective) track quality.
