@@ -1,11 +1,10 @@
 Package: Spotify200
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Top 200 Spotify Tracks
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Author: Ines Ajimi
+Maintainer: Ines Ajimi <ia2272@columbia.edu>
+Description: Spotify200 is a data package centered on Spotify's Top 200 Most Streamed songs in the U.S. It includes a wealth of information about every song which reached the top 200 between January 1, 2017 and December 2019, including audio-features, artist-specific information, and its ranking over time.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
