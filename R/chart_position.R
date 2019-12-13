@@ -2,7 +2,7 @@
 #'
 #' A dataset containing the daily chart position of all tracks having reached Spotify's top 200 tracks (U.S.) between January 1, 2017 and December 4, 2019.
 #'
-#' @format A data frame with 212,600 rows and 7 variables:
+#' @format A data frame with 214,400 rows and 7 variables:
 #' \describe{
 #'   \item{Position}{track position in the top 200}
 #'   \item{Track}{track name}

@@ -2,7 +2,7 @@
 #'
 #' A dataset containing aggregate metrics of all tracks having reached Spotify's top 200 tracks (U.S.) between January 1, 2017 and December 4, 2019.
 #'
-#' @format A data frame with 4,503 rows and 6 variables:
+#' @format A data frame with 4,538 rows and 6 variables:
 #' \describe{
 #'   \item{Track}{track name}
 #'   \item{Artist}{artist name}

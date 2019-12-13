@@ -2,7 +2,7 @@
 #'
 #' A dataset containing the score given by Pitchfork to albums released by artists having reached Spotify's top 200 tracks (U.S.).
 #'
-#' @format A data frame with 150 rows and 5 variables:
+#' @format A data frame with 979 rows and 5 variables:
 #' \describe{
 #'   \item{artist}{artist's name}
 #'   \item{score}{score given by pitchfork, from a scale of 0 to 10}
