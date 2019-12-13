@@ -4,6 +4,7 @@ library("dplyr")
 library("readr")
 library("magrittr")
 library("stringr")
+library("purrr")
 
 ### Retrieving Spotify Charts ####
 ## Creating List of Dates for Which to Retrieve Data
@@ -25,7 +26,8 @@ for (i in c(1:length(calendar))){
     download.file(url, dest_file) #downloads file from url
     temp_db <- readr::read_csv(dest_file, skip = 1) #saves db temporarily
     temp_db <- mutate(temp_db, Date = date)
-    results[[i]] <- temp_db #saves it in results
+    results[[i]] <- temp_db #saves dataframe in results
+    unlink(dest_file, ".csv") #deletes file from computer
   }, error=function(e){})
 
 
@@ -54,7 +56,7 @@ track_position_aggregate <- chart_position %>%
             Days_Trending = n())
 
 ## Spotify DIY API ####
-## Get Spotify Token (one-time only)
+## Get Spotify Token (initial token)
 endpoint <- oauth_endpoint(authorize = 'https://accounts.spotify.com/authorize',
                            access = 'https://accounts.spotify.com/api/token')
 
@@ -63,7 +65,7 @@ app <- oauth_app('r',
                  Sys.getenv("SPOTIFY_CLIENT_SECRET"),
                  redirect_uri = "http://localhost:1410/")
 
-auth.code <- oauth2.0_token(endpoint = endpoint, app = app, scope = c("user-read-recently-played", "user-top-read"))
+auth.code <- oauth2.0_token(endpoint = endpoint, app = app, scope = c("user-read-recently-played", "user-top-read")) #request user auth
 1 #response to auth code prompt
 
 token <- auth.code$credentials$access_token
@@ -107,10 +109,14 @@ retrieve_Spotify <- function(type, urls){
       user_token_refresh <- httr::POST('https://accounts.spotify.com/api/token', body = request_body_refresh, encode='form')
 
       if (user_token_refresh$status_code == 200){  #verify status
+
         token <- content(user_token_refresh)$access_token
         auth_header <- httr::add_headers('Authorization'= paste('Bearer', token))
+
       } else{
+
         http_error(user_token_refresh)
+
       }
 
       #Repeat Call
@@ -130,6 +136,7 @@ retrieve_Spotify <- function(type, urls){
 
         temp$track_ID <- response$id
         temp$artist_ID <- response$artists[[1]]$id #artist id
+        temp$album_name <- response$album$name
         temp$album_type <- response$album$album_type
         temp$popularity <- response$popularity
         temp$track_number <- response$track_number
@@ -148,18 +155,21 @@ retrieve_Spotify <- function(type, urls){
         temp$artist_ID <- response$id
         temp$artist_popularity <- response$popularity
         temp$followers <- response$followers$total
-        temp$genres <- response$genres %>% map(1) %>% paste(collapse = " - ")  #paste includes "NULL" responses
+        temp$genres <- response$genres %>% purrr::map(1) %>% paste(collapse = " - ")  #paste includes "NULL" responses
 
       }
 
       if (type == "track_features"){
+
         temp <- response
+
       }
 
       output[[i]] <- temp
 
 
     } else{
+
       # Still Save Output
       output <- do.call(rbind.data.frame, output) %>% as.data.frame()
       nam <- paste("output", type, sep = "_")
@@ -172,6 +182,7 @@ retrieve_Spotify <- function(type, urls){
 
   }
 
+  # Saving Output as Dataframe
   output <- do.call(rbind.data.frame, output) %>% as.data.frame()
   nam <- paste("output", type, sep = "_")
   rownames(output) <- c()
@@ -187,7 +198,7 @@ track_info_urls <- paste("https://api.spotify.com/v1/tracks/", track_information
 # Using Function to Retrieve Information
 retrieve_Spotify(type = "track_info", urls = track_info_urls)
 
-# Preview of Results
+# Preview Results
 output_track_info %>% head()
 
 #Adding to track_information
@@ -200,7 +211,7 @@ track_features_urls <- paste("https://api.spotify.com/v1/audio-features/", track
 # Using Function to Retrieve Information
 retrieve_Spotify(type = "track_features", urls = track_features_urls)
 
-# Preview of Results
+# Preview Results
 output_track_features %>% head()
 
 # Quick Cleaning of DB
@@ -220,12 +231,11 @@ artist_info_urls <- paste("https://api.spotify.com/v1/artists/", track_informati
 # Using Function to Retrieve Information
 retrieve_Spotify(type = "artist_info", urls = artist_info_urls)
 
-# Preview of Results
+# Preview Results
 output_artist_info %>% head()
 
 #Adding to track_information
 track_information <- dplyr::left_join(track_information, output_artist_info)
-
 
 
 ## Collecting Relevant Information from Pitchfork ####
@@ -304,6 +314,8 @@ pitchfork_agg <- pitchfork_agg %>%
             n_albums_review = n())
 
 track_information <- left_join(track_information, pitchfork_agg)
+
+track_information <- distinct(track_information)
 
 ## Saving results ####
 usethis::use_data(chart_position, overwrite = TRUE)
